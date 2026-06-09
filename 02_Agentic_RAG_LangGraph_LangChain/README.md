@@ -96,6 +96,81 @@ It rebuilds the same cat health agentic RAG application with Python standard-lib
 
 The application-facing names are inspired by Vercel AI SDK Core, including `tool()`, `generate_text()`, `step_count_is()`, `steps`, `on_step_finish`, `prepare_step`, and `ToolLoopAgent`. The notebook is a reference walkthrough, not an additional assignment.
 
+## Questions and Answers
+
+#### ❓ Question #1
+
+What changes when retrieval becomes a tool instead of a mandatory first step?
+
+##### ✅ Answer:
+
+Sometimes, retrieval doesn't even happen. It also can be more nuanced. The agent could decide to enter a different query for the search rather than rely on the human response to be optimal. Or the agent could do multiple separate targeted calls. Maybe even using subagents.
+
+---
+
+#### ❓ Question #2
+
+What does middleware let us change or observe without rebuilding the agent loop? Why is a model-call limit useful?
+
+##### ✅ Answer:
+
+It lets us build a reliable layer with deterministic code that we can ensure:
+1. Runs every time as intended.
+2. Lets us add extra things like logging, which in practice is very useful for developing and maintaining agentic systems.
+3. Adds guardrails. For instance, having a limit is useful so the model doesn't go crazy and just end up in an infinite loop.
+
+---
+
+#### ❓ Question #3
+
+For each example, did the agent call the retrieval tool? Why or why not?
+
+##### ✅ Answer:
+
+No, in the third example there was no tool call. The reason being the LLM, when initially presented with the user query, correctly recognized that the question was irrelevant. There was no need to retrieve any information, because the result should be the same regardless: telling the user that this query cannot be answered.
+
+---
+
+#### ❓ Question #4
+
+What parts did `create_agent` hide that the explicit LangGraph version made visible? When would you choose middleware, and when would you change the graph itself?
+
+##### ✅ Answer:
+
+`create_agent` is a convenience method. It makes it easy to set up things, but might hide away other details. For instance, it wasn't entirely easy to figure out what the middle layer was doing. LangGraph might be better if you want a more custom solution that's easy to observe the exact internals of the decisions. `create_agent` on the other hand makes it super easy to reuse logic as well as get up and running with a solution.
+
+---
+
+## 🏗️ Activity Notes
+
+### Activity #1: Retriever Tool-Call Budget
+
+- Which retrieval calls did the agent attempt?
+- Which call did the middleware allow or block?
+- What quality or safety trade-off does this budget introduce?
+
+##### Answer:
+
+- It only attempted one of the retrieval calls, correctly. Although I'm not sure why it chose to perform the second question search first and so the first question search is what was blocked. Probably just coincidence.
+- Middleware correctly allowed first tool call, but blocked the second one.
+- It puts a guardrail against infinite loops or redundant low-value tool calls. However, it also constrains the model. If it decides to break down the problem solution into multiple tool calls, the system will might get blocked and not be able to construct a full, final solution.
+
+---
+
+### Activity #2: Deterministic Scope Routing
+
+- Which questions bypassed the model-tools loop?
+- What happened with the ambiguous question?
+- What are the cost, latency, and quality trade-offs of this route?
+
+##### Answer:
+
+- It seemed to filter decently well. The FIFA question was correctly blocked.
+- This one was interesting, because even though I didn't mention a cat, it still assumed it should be for a cat. The system really should be tweaked to be more nuanced or give some warning about only having cat-based knowledge.
+- Obviously, adding more steps makes things more complicated. Each LLM call adds more tokens consumed and latency. You need to balance that against what you're trying to do. In practice, with AI applications I've created at work, we've actually sought to consolidate requests to counteract these tradeoffs, especially at scale.
+
+---
+
 ## Submitting Your Homework
 
 ### Main Assignment
