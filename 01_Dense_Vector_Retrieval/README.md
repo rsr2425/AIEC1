@@ -88,7 +88,7 @@ Why is metadata important for a RAG application?
 
 ##### ✅ Answer:
 
-Metadata helps contextualize chunks for a RAG application. Remember that a chunk is more or less a random string that might not make sense in isolation. It can be helpful to retrieve that context back to make the RAG application better. Maybe you want to pass that as part of the prompt. Maybe you want to include this (as well as the chunk) when citing the sources used for a response. You could even recover all the chunks associated with any specific document and include those whenever your retrieval system returns a single chunk. All of these things require metadata to make it possible.
+Metadata helps contextualize chunks for a RAG application. Remember that a chunk is more or less a random string that might not make sense in isolation. It can be helpful to retrive that context back to make the RAG application better. Maybe you want to pass that as part of the prompt. Maybe you want to include this (as well as the chunk) when citing the sources used for a response. YOu could even recover all the chunks associated with any specific document and include those whenever your retrieval system returns a single chunk. All of these things require metadata to make it possible.
 
 #### ❓Question #3
 
@@ -96,13 +96,14 @@ What tradeoff do we make when choosing chunk size and chunk overlap?
 
 ##### ✅ Answer:
 
-By breaking down documents into chunks, you are able to:
-1. Include the most relevant information to a response. To answer a specific question, you often won't need the entire document.
+By breaking down documents into chunks, you are able to
+1. Include the most relevant information to a response. To answer a specific question, you often won't need the entire document
 2. Maximize the valuable content you can fit into a context window. You can include information from many more documents when you only include relevant chunks.
-
-So smaller chunk sizes give you more flexibility. However, smaller chunk size also means you have more chunks you have to sift through, which might have performance implications.
+So smaller chunk sizes give you more flexiblity. However, smaller chunk size also means you have more chunks you have to sift through, which might have performance implications. 
 
 Chunk overlap is related to this tradeoff as well. 0 overlap means you minimize redundant tokens passed to the prompt as well as number of tokens generated overall. However, depending on how you chunk documents, the chunks themselves may not contain all relevant information. Maybe important pieces are between two chunks, and are indecipherable because it's partially in one chunk and another that may or may not have been picked up by the retrieval system.
+
+Use the [Chunk Visualizer](https://chunkviz.up.railway.app/) to experiment with different chunk sizes and overlaps and see how the text boundaries change.
 
 #### ❓Question #4
 
@@ -110,9 +111,9 @@ What does a similarity score help you understand, and what does it not prove by 
 
 ##### ✅ Answer:
 
-It helps you understand the degree to which two strings are talking about the same topic. The absolute number also doesn't matter as much (especially since different models can provide different absolute scores). However, they are useful to indicate relative similarity. You can use them to sort your chunks and only grab the most important pieces.
+It helps you understand the degree to which two random strings are talking about the same topic. The absolute number also doesn't matter as much (especially since different models can provide different absolute scores). However, they are useful to indicate relative similiarity. You can use them to sort your chunks and only grab the most important pieces.
 
-It does not PROVE that two strings are related or speaking to the same topic. In RAG, it's used only to help filter down and maximize the number of relevant chunks when we limit ourselves to passing say the top 10 most relevant chunks to the LLM to get an answer.
+It does not PROVE that two strings are related or speaking two the same topic. In RAG, it's used only to help filter down and maxmize the number of relevant chunks when we limit ourselves to passing say the top 10 most relevant chunks to the LLM to get an answer.
 
 ---
 
@@ -129,7 +130,7 @@ For the vibe check queries, did the retrieved context seem relevant before gener
 
 ##### ✅ Answer:
 
-Just going off the vibes, it seems pretty decent. They seem relevant for answering questions about a cat's health. The scores don't seem high per se (all around ~0.5) but directionally that's right and it's hard to make any determination based on absolute similarity score.
+Just going off the vibes, it seems pretty decently. They seem relevant for answering questions about a cat's health. The scores don't seem high per se (all around ~0.5) but directionally that's right and it's hard to make any determination based on absolute similarity score.
 
 ---
 
