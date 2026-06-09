@@ -69,7 +69,7 @@ Why is cosine similarity useful for dense vector retrieval?
 
 ##### ✅ Answer:
 
----
+It allows you to compare random strings of text in ways you couldn't do before. You can now do math to get an objective number which tells you relatively how related arbitrary strings are. It ties back directly to the meaning and context of the text.
 
 ## 🏗️ Activity #2: Build the Vector RAG Pipeline
 
@@ -88,17 +88,31 @@ Why is metadata important for a RAG application?
 
 ##### ✅ Answer:
 
+Metadata helps contextualize chunks for a RAG application. Remember that a chunk is more or less a random string that might not make sense in isolation. It can be helpful to retrieve that context back to make the RAG application better. Maybe you want to pass that as part of the prompt. Maybe you want to include this (as well as the chunk) when citing the sources used for a response. You could even recover all the chunks associated with any specific document and include those whenever your retrieval system returns a single chunk. All of these things require metadata to make it possible.
+
 #### ❓Question #3
 
 What tradeoff do we make when choosing chunk size and chunk overlap?
 
 ##### ✅ Answer:
 
+By breaking down documents into chunks, you are able to:
+1. Include the most relevant information to a response. To answer a specific question, you often won't need the entire document.
+2. Maximize the valuable content you can fit into a context window. You can include information from many more documents when you only include relevant chunks.
+
+So smaller chunk sizes give you more flexibility. However, smaller chunk size also means you have more chunks you have to sift through, which might have performance implications.
+
+Chunk overlap is related to this tradeoff as well. 0 overlap means you minimize redundant tokens passed to the prompt as well as number of tokens generated overall. However, depending on how you chunk documents, the chunks themselves may not contain all relevant information. Maybe important pieces are between two chunks, and are indecipherable because it's partially in one chunk and another that may or may not have been picked up by the retrieval system.
+
 #### ❓Question #4
 
 What does a similarity score help you understand, and what does it not prove by itself?
 
 ##### ✅ Answer:
+
+It helps you understand the degree to which two strings are talking about the same topic. The absolute number also doesn't matter as much (especially since different models can provide different absolute scores). However, they are useful to indicate relative similarity. You can use them to sort your chunks and only grab the most important pieces.
+
+It does not PROVE that two strings are related or speaking to the same topic. In RAG, it's used only to help filter down and maximize the number of relevant chunks when we limit ourselves to passing say the top 10 most relevant chunks to the LLM to get an answer.
 
 ---
 
@@ -115,6 +129,8 @@ For the vibe check queries, did the retrieved context seem relevant before gener
 
 ##### ✅ Answer:
 
+Just going off the vibes, it seems pretty decent. They seem relevant for answering questions about a cat's health. The scores don't seem high per se (all around ~0.5) but directionally that's right and it's hard to make any determination based on absolute similarity score.
+
 ---
 
 ## 🏗️ Activity #4: Tune Retrieval
@@ -130,13 +146,17 @@ Document what changed and whether retrieval improved.
 
 ##### Settings Changed:
 
--
+| Setting | Before | After |
+|---|---|---|
+| `chunk_size` | 1000 | 500 |
+| `chunk_overlap` | 200 | 100 |
+| `k` | 4 | 10 |
 
 ##### Results:
 
-1.
-2.
-3.
+With smaller chunks and a higher `k`, the retrieval returned more sources spread across more pages. The answers still looked reasonable and were well-cited.
+
+**Did retrieval improve?** Hard to say definitively — without being a subject matter expert (SME), it's hard to judge whether the additional sources were genuinely more relevant or just more numerous. The scores were similar (~0.52–0.60). But validating true retrieval quality really requires domain expertise to confirm the right information was surfaced. I also hard more of an issue with formatting, which seems to have somehow gotten worse with more sources. Definitely needs some prompt tuning.
 
 ---
 
