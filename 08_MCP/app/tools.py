@@ -36,6 +36,24 @@ async def list_products(category: str | None = None) -> list[dict]:
 
 
 @mcp.tool()
+async def search_products(query: str) -> list[dict]:
+    """Search the cat shop catalog by keyword. Matches against product name and description.
+    
+    Quick and dirty implementation. In prod, you should sanitize the query rather than accepting directly what was sent by the user."""
+    db = await oauth_provider._get_db()
+    pattern = f"%{query}%"
+    cursor = await db.execute(
+        "SELECT id, name, description, price, category FROM products WHERE name LIKE ? OR description LIKE ?",
+        (pattern, pattern),
+    )
+    rows = await cursor.fetchall()
+    return [
+        {"id": r[0], "name": r[1], "description": r[2], "price": r[3], "category": r[4]}
+        for r in rows
+    ]
+
+
+@mcp.tool()
 async def get_product(product_id: int) -> dict:
     """Get full details of a single product by its ID."""
     db = await oauth_provider._get_db()
