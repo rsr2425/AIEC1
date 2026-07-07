@@ -83,7 +83,13 @@ What is the difference between serverless and dedicated endpoints?
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+Serverless
+- Billed by the token usage only
+- Very few gurantees for uptime
+Deidcated Endpoint
+- Dedidcated gpu equipment
+- Pay for gpu usage, measured by time, rather than token usage
+- Pro is no marginal monetary cost per token. Con is that you get charged even if you do not perform any LLM inference call at all.
 
 ### ❓ Question #2:
 
@@ -91,7 +97,7 @@ Why is it important to consider token throughput and latency when choosing an LL
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+LLM inference is a relatively slow operation, and the time for each LLM calls increases the more context you feed in. Tokens and latency have a very real impact on how the application performs for endusers. Moreover, it will impact the number of simultaneous users your applciation can handle.
 
 ## Activity 1: RAGAS Evaluation with Cost Analysis
 
