@@ -428,7 +428,7 @@ Why does LangSmith deploy your agent as an API backend only, and why do you stil
 
 #### Answer
 
-_(insert your answer here)_
+It's common practice, and desirable, to split out the deployments for backend apis and frontends. In particular here, out backend api is an agent system which has different needs and tradeoffs. Deploying them separately allows you to manage (and if needed, scale) them separately. Also it's about using the best tool for the job. LangSmith is focused on providing agentic server deployments, not next js applications. Vercel, on the other hand, has dedicated infra specifically for Next.js deployments.
 
 ### Question #2
 
@@ -436,7 +436,7 @@ Why should the LangSmith API key live in a Next.js API route (server-side) inste
 
 #### Answer
 
-_(insert your answer here)_
+It's safer that wa; you don't have to expose the key like you would with a browser. The key never leaves the server. You still empower the user to connect to the resources needed as necessary, but let's you control all interactions and costs, which might be abused by a bad actor.
 
 ## Activity 1: Build a Helpfulness Loop in Production
 
