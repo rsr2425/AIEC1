@@ -436,7 +436,7 @@ Why should the LangSmith API key live in a Next.js API route (server-side) inste
 
 #### Answer
 
-It's safer that wa; you don't have to expose the key like you would with a browser. The key never leaves the server. You still empower the user to connect to the resources needed as necessary, but let's you control all interactions and costs, which might be abused by a bad actor.
+It's safer that way; you don't have to expose the key like you would with a browser. The key never leaves the server. You still empower the user to connect to the resources needed as necessary, but let's you control all interactions and costs, which might be abused by a bad actor.
 
 ## Activity 1: Build a Helpfulness Loop in Production
 
